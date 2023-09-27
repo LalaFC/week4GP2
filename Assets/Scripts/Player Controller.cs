@@ -9,9 +9,9 @@ public class PlayerController : MonoBehaviour
     public float speed;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        PlayerAnim = GetComponent<Animator>();
+        PlayerAnim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame

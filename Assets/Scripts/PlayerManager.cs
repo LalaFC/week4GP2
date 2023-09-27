@@ -7,8 +7,10 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager instance { get; private set; }
 
     public GameObject player;
-    InputManager inputManager;
-    PlayerLocomotion locomotion;
+    public InputManager inputManager;
+    public PlayerLocomotion locomotion;
+    public Rigidbody _rigidbody;
+
 
     public float mvmtSpeed;
     public float rotSpeed;

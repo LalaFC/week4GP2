@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PlayerLocomotion : MonoBehaviour
 {
-    private InputManager _inputManager;
     private Vector3 direction; 
-    private Rigidbody _rigidbody;
     private Transform _camera;
+    private Vector3 moveVelocity, targetDir;
 
     private void Awake()
     {
-        _inputManager = GetComponent<InputManager>();
-        _rigidbody = GetComponent<Rigidbody>();
         _camera = Camera.main.transform;
     }
 
@@ -24,10 +21,32 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleMovement () 
     {
-
+        direction = _camera.forward * PlayerManager.instance.inputManager.verInput;
+        direction = direction + _camera.right * PlayerManager.instance.inputManager.horInput;
+        direction.Normalize();
+        direction.y = 0;
+        direction *= PlayerManager.instance.mvmtSpeed;
+        moveVelocity = direction;
+        PlayerManager.instance._rigidbody.velocity = moveVelocity;
     } 
     private void HandleRotation () 
     {
+        if (PlayerManager.instance.inputManager.verInput != 0 || PlayerManager.instance.inputManager.horInput != 0) 
+        {
+            targetDir = Vector3.zero;
+            targetDir = _camera.forward * PlayerManager.instance.inputManager.verInput;
+            targetDir = targetDir + _camera.right * PlayerManager.instance.inputManager.horInput;
+            targetDir.Normalize();
+            targetDir.y = 0;
+
+            Quaternion targetRot = Quaternion.LookRotation(targetDir);
+            Quaternion playerRot =
+                    Quaternion.Slerp
+                    (
+                        transform.rotation, targetRot, PlayerManager.instance.rotSpeed
+                    );
+            transform.rotation = playerRot;
+        }
 
     }
 }
